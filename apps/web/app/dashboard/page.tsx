@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import { useState } from 'react';
 import AgentConsole from '../components/AgentConsole';
 import AgentResultCard from '../components/AgentResultCard';
 import { Cpu, Activity, Zap, Clock, TrendingUp, Copy, History } from 'lucide-react';

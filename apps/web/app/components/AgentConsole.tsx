@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Play, Settings, Clock, Zap, AlertCircle, Copy, CheckCircle, BarChart3 } from 'lucide-react';
 
 export default function AgentConsole() {

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+// No React import needed in Next.js 13+ App Router
 import { FileText, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function AgentResultCard({ data }: { data?: any }) {
