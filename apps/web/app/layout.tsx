@@ -1,23 +1,6 @@
 import './globals.css';
-import React from 'react';
 import { headers } from 'next/headers';
-import { WagmiProvider, createConfig, http } from 'wagmi';
-import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-// Define chains with proper typing
-const chains = [mainnet, polygon, sepolia] as const;
-
-const wagmiConfig = createConfig({
-  chains,
-  transports: {
-    [mainnet.id]: http(),
-    [polygon.id]: http(),
-    [sepolia.id]: http(),
-  }
-});
-
-const queryClient = new QueryClient();
+import Providers from './providers';
 
 export const metadata = {
   title: 'AI + Crypto Autonomous Agents Hub',
@@ -49,9 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen bg-cyber-bg text-cyber-text antialiased">
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-        </WagmiProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

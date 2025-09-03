@@ -1,4 +1,4 @@
-import React from 'react';
+// No React import needed in Next.js 13+ App Router
 import Link from 'next/link';
 import WalletConnect from './components/WalletConnect';
 import { Zap, Shield, Cpu, ArrowRight } from 'lucide-react';
