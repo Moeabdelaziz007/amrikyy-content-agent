@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  firebase:
+    image: node:20
+    working_dir: /workspace
+    command: sh -c "npm i -g firebase-tools && firebase emulators:start --only firestore,functions --project demo-content-agent --import=.firebase_data --export-on-exit"
+    ports:
+      - "4000:4000"
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ./:/workspace
+    environment:
+      - FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099
+      - FIRESTORE_EMULATOR_HOST=0.0.0.0:8080
+      - FUNCTIONS_EMULATOR_HOST=0.0.0.0:5001
+      - SIWE_JWT_SECRET=dev-secret
+      - OPENAI_API_KEY=sk-REPLACE_ME
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  api:
+    image: node:20
+    working_dir: /workspace/apps/api
+    command: sh -c "npm i && npm run dev"
+    environment:
+      - PORT=4000
+      - SIWE_JWT_SECRET=dev-secret
+      - OPENAI_API_KEY=sk-REPLACE_ME
+      - FIRESTORE_EMULATOR_HOST=firebase:8080
+      - GOOGLE_CLOUD_PROJECT=demo-content-agent
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./:/workspace
+    depends_on:
+      - firebase
+
+  web:
+    image: node:20
+    working_dir: /workspace/apps/web
+    command: sh -c "npm i && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/workspace
+    environment:
+      - NEXT_PUBLIC_DEV_MODE=true
+      - FUNCTIONS_BASE_URL=http://localhost:5001/PROJECT_ID/us-central1/contentAgent
+      - SIWE_JWT_SECRET=dev-secret
