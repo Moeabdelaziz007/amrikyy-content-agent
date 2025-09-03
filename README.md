@@ -125,3 +125,33 @@ cd functions/content_agent
 npm i
 SIWE_JWT_SECRET=... OPENAI_API_KEY=... firebase deploy --only functions:contentAgent
 ```
+
+
+## Project Report (Files and Statuses)
+
+Generate a comprehensive report about project files and statuses (Git) using the built-in script.
+
+Quick usage (human-readable text):
+```
+python3 scripts/project_report.py --format text
+```
+
+Generate Markdown report and save to file:
+```
+python3 scripts/project_report.py --format md --output PROJECT_REPORT.md
+```
+
+Include heavy directories (node_modules/.next/dist) if you need a full inventory:
+```
+python3 scripts/project_report.py --format md --include-node-modules --output PROJECT_REPORT_FULL.md
+```
+
+JSON output for tooling:
+```
+python3 scripts/project_report.py --format json --output project_report.json
+```
+
+Notes:
+- By default, heavy directories like node_modules, .next, dist, build, .terraform, etc. are excluded to keep the report fast.
+- Git status is included when the repo is inside a Git work tree and git is available on PATH.
+- Run from repo root (default) or pass a custom root: `--root /path/to/repo`.
