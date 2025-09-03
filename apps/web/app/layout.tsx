@@ -5,24 +5,16 @@ import { WagmiProvider, createConfig, http } from 'wagmi';
 import { mainnet, polygon, arbitrum, sepolia } from 'viem/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-const chainsMap: Record<string, any> = {
-  mainnet,
-  polygon,
-  arbitrum,
-  sepolia
-};
-
-const chains = (process.env.NEXT_PUBLIC_CHAINS || 'mainnet,polygon,sepolia')
-  .split(',')
-  .map((c) => chainsMap[c.trim()])
-  .filter(Boolean);
+// Define chains with proper typing
+const chains = [mainnet, polygon, sepolia] as const;
 
 const wagmiConfig = createConfig({
   chains,
-  transports: chains.reduce((acc: Record<number, ReturnType<typeof http>>, chain: any) => {
-    acc[chain.id] = http();
-    return acc;
-  }, {})
+  transports: {
+    [mainnet.id]: http(),
+    [polygon.id]: http(),
+    [sepolia.id]: http(),
+  }
 });
 
 const queryClient = new QueryClient();
