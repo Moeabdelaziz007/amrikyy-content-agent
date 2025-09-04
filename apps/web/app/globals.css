@@ -2,32 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Cybernetic Night Theme - Dark Mode First */
+/* Neon Green & Carbon Fiber Theme */
 :root {
-  /* Dark Background Palette */
-  --background: #0A0A0A;
+  /* Dark Carbon Fiber Palette */
+  --background: #050505;
   --background-secondary: #111111;
   --background-tertiary: #1A1A1A;
-  
-  /* Electric Blue Accent */
-  --accent-primary: #00D4FF;
-  --accent-secondary: #0099CC;
-  --accent-glow: rgba(0, 212, 255, 0.3);
-  
+
+  /* Neon Green Accent */
+  --accent-primary: #39FF14; /* Neon Green */
+  --accent-secondary: #2EFF0F;
+  --accent-glow: rgba(57, 255, 20, 0.3);
+
   /* Text Colors */
-  --text-primary: #FFFFFF;
-  --text-secondary: #B3B3B3;
+  --text-primary: #E0E0E0;
+  --text-secondary: #A0A0A0;
   --text-muted: #666666;
-  
+
   /* Border Colors */
   --border-primary: #333333;
-  --border-accent: #00D4FF;
-  
+  --border-accent: #39FF14;
+
   /* Status Colors */
   --success: #00FF88;
   --warning: #FFB800;
   --error: #FF4444;
-  --info: #00D4FF;
+  --info: #39FF14;
 }
 
 /* Base Styles */
@@ -41,13 +41,17 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: var(--background);
   color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, var(--background) 0%, var(--background-secondary) 100%);
+  /* Carbon Fiber Background */
+  background-color: var(--background);
+  background-image:
+    linear-gradient(45deg, rgba(20, 20, 20, .8) 25%, transparent 25%, transparent 75%, rgba(20, 20, 20, .8) 75%, rgba(20, 20, 20, .8)),
+    linear-gradient(-45deg, rgba(20, 20, 20, .8) 25%, transparent 25%, transparent 75%, rgba(20, 20, 20, .8) 75%, rgba(20, 20, 20, .8));
+  background-size: 6px 6px;
   min-height: 100vh;
 }
 
@@ -112,7 +116,7 @@ p {
 /* Button Styles */
 .btn-cyber {
   background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-  color: var(--background);
+  color: #000; /* Black text on neon green button for contrast */
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
@@ -143,7 +147,7 @@ p {
 
 .card-cyber:hover {
   border-color: var(--accent-primary);
-  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(57, 255, 20, 0.1);
 }
 
 /* Input Styles */

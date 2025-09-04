@@ -14,42 +14,39 @@ module.exports = {
         sans: ['Inter', ...fontFamily.sans]
       },
       colors: {
-        // Cybernetic Night Theme
-        cyber: {
-          bg: '#0A0A0A',
-          'bg-secondary': '#111111',
-          'bg-tertiary': '#1A1A1A',
-          accent: '#00D4FF',
-          'accent-secondary': '#0099CC',
-          'accent-glow': 'rgba(0, 212, 255, 0.3)',
-          text: '#FFFFFF',
-          'text-secondary': '#B3B3B3',
-          'text-muted': '#666666',
-          border: '#333333',
-          'border-accent': '#00D4FF',
-          success: '#00FF88',
-          warning: '#FFB800',
-          error: '#FF4444',
-          info: '#00D4FF',
+        background: 'var(--background)',
+        'background-secondary': 'var(--background-secondary)',
+        'background-tertiary': 'var(--background-tertiary)',
+        accent: {
+          primary: 'var(--accent-primary)',
+          secondary: 'var(--accent-secondary)',
+        },
+        text: {
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          muted: 'var(--text-muted)',
+        },
+        border: {
+          primary: 'var(--border-primary)',
+          accent: 'var(--border-accent)',
+        },
+        status: {
+          success: 'var(--success)',
+          warning: 'var(--warning)',
+          error: 'var(--error)',
+          info: 'var(--info)',
         },
       },
       boxShadow: {
-        'cyber': '0 0 20px rgba(0, 212, 255, 0.3)',
-        'cyber-sm': '0 0 10px rgba(0, 212, 255, 0.2)',
-        'cyber-lg': '0 0 30px rgba(0, 212, 255, 0.4)',
+        'cyber-glow': '0 0 20px var(--accent-glow)',
       },
       animation: {
         'cyber-pulse': 'cyber-pulse 2s ease-in-out infinite',
-        'cyber-glow': 'cyber-glow 2s ease-in-out infinite alternate',
       },
       keyframes: {
         'cyber-pulse': {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.5' },
-        },
-        'cyber-glow': {
-          '0%': { boxShadow: '0 0 5px rgba(0, 212, 255, 0.2)' },
-          '100%': { boxShadow: '0 0 20px rgba(0, 212, 255, 0.6)' },
         },
       },
     }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SiweMessage } from 'siwe';
 import { SignJWT } from 'jose';
 import { cookies } from 'next/headers';
+import { isWhitelisted } from '../../../lib/alpha';
 
 const JWT_SECRET = new TextEncoder().encode(process.env.SIWE_JWT_SECRET || 'dev-secret');
 const JWT_TTL_SECONDS = 60 * 60; // 1 hour
@@ -24,6 +25,12 @@ export async function POST(req: NextRequest) {
     }
 
     const walletAddress = siwe.address.toLowerCase();
+
+    // Alpha whitelist enforcement
+    if (!isWhitelisted(walletAddress)) {
+      return NextResponse.json({ error: 'Alpha access required: wallet not whitelisted' }, { status: 403 });
+    }
+
     const payload = {
       sub: walletAddress,
       wallet: walletAddress,

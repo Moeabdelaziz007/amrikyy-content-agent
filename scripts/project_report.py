@@ -14,10 +14,10 @@ Usage:
   python3 scripts/project_report.py --format md --output PROJECT_REPORT.md
 
 Options:
-  --root PATH                  Root directory to scan (default: repo root deduced from this script)
-  --format {text,json,md}      Output format (default: text)
-  --output FILE                Write report to a file (default: stdout)
-  --include-node-modules       Include node_modules/.next/dist/etc in the scan (default: excluded)
+  --root PATH Root directory to scan (default: repo root deduced from this script)
+  --format {text,json,md} Output format (default: text)
+  --output FILE Write report to a file (default: stdout)
+  --include-node-modules Include node_modules/.next/dist/etc in the scan (default: excluded)
 
 This script is dependency-free and portable across platforms.
 """
@@ -31,6 +31,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+# noinspection PyInterpreter
 from typing import Dict, Iterable, List, Optional, Tuple
 
 # Common heavy directories to exclude by default
@@ -111,7 +112,7 @@ class GitStatus:
 
 
 def detect_repo_root(script_path: Path) -> Path:
-    # Assume script is at repo_root/scripts/project_report.py -> repo_root is parent of scripts
+    # Assume script is at repo_root/scripts/project_report.py -> repo_root is the parent of scripts
     scripts_dir = script_path.parent
     repo_root = scripts_dir.parent
     return repo_root
@@ -126,7 +127,7 @@ def scan_files(root: Path, excludes: set) -> Tuple[List[FileStat], int, int]:
     dir_count = 0
     file_count = 0
     for dirpath, dirnames, filenames in os.walk(root):
-        # Apply excludes to dirnames in-place to prune traversal
+        # Apply excludes to surnames in-place to prune traversal
         parts = Path(dirpath).parts
         if should_exclude(parts, excludes):
             dirnames[:] = []
@@ -171,6 +172,18 @@ def summarize_languages(ext_counts: Dict[str, int], ext_sizes: Dict[str, int]) -
 
 def top_largest(files: List[FileStat], n: int = 20) -> List[FileStat]:
     return sorted(files, key=lambda f: f.size, reverse=True)[:n]
+
+
+def len(param):
+    pass
+
+
+def list(param):
+    pass
+
+
+def sorted(param):
+    pass
 
 
 def collect_package_summaries(root: Path, excludes: set) -> List[PackageSummary]:
@@ -470,7 +483,7 @@ def build_json_report(
 def generate_report(root: Path, include_node_modules: bool, fmt: str) -> str:
     excludes = set(DEFAULT_EXCLUDES)
     if include_node_modules:
-        # If including node_modules, still exclude some meta folders
+        # If including node_modules, still exclude some meta-folders
         excludes = {".git", "__pycache__", ".DS_Store", ".idea"}
 
     files, dir_count, file_count = scan_files(root, excludes)
