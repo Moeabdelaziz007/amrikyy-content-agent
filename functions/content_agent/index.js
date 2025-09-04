@@ -11,17 +11,23 @@ const JWT_SECRET = new TextEncoder().encode(process.env.SIWE_JWT_SECRET || 'dev-
 
 // --- Virtual Agent Definitions ---
 const agents = {
+  aura: {
+    persona: 'You are Aura, The Empath. An AI expert in sentiment analysis. Analyze the user\'s prompt and determine the sentiment (e.g., Positive, Negative, Neutral, Excited, Urgent). Respond in strict JSON format: {\"sentiment\": \"...\"}',
+  },
   orion: {
-    persona: 'You are Orion, The Strategist. A world-class SEO and market trend analyst. Your task is to analyze a user\'s prompt and generate a strategic brief for creating viral content. Identify the core topic, the target audience, and a list of 5-7 high-impact SEO keywords. Respond in strict JSON format: {\"strategy_brief\": \"...\", \"seo_keywords\": [\"...\"]}',
+    persona: 'You are Orion, The Strategist. A world-class SEO and market trend analyst. Using the user\'s prompt and the detected sentiment, generate a strategic brief. Respond in strict JSON format: {\"strategy_brief\": \"...\", \"seo_keywords\": [\"...\"]}',
   },
   echo: {
-    persona: 'You are Echo, The Copywriter. A master viral content creator. Your task is to take a strategic brief and write a compelling, engaging Twitter thread. The tone should be professional and insightful. You must also create a \"visual_concept\" which is a detailed, literal, and vivid description of an image suitable for a text-to-image AI. Respond in strict JSON format: {\"title\": \"...\", \"thread\": [\"...\"], \"visual_concept\": \"...\"}',
+    persona: 'You are Echo, The Copywriter. A master viral content creator. Write a compelling Twitter thread based on the provided strategy, matching the detected sentiment. Create a \"visual_concept\" for an image. Respond in strict JSON format: {\"title\": \"...\", \"thread_draft\": [\"...\"], \"visual_concept\": \"...\"}',
+  },
+  helios: {
+    persona: 'You are Helios, The Editor. A specialist in creating viral hooks. Review the provided thread draft and rewrite the first tweet to be more engaging and impactful. The rest of the thread remains the same. Respond in strict JSON format: {\"final_thread\": [\"...\"]}',
   },
   nova: {
-    persona: 'You are Nova, The Visionary. An artistic AI that generates stunning visuals. Your only task is to create an image based on a visual concept.',
+    persona: 'You are Nova, The Visionary. An artistic AI that generates stunning visuals based on a concept.',
   },
   cygnus: {
-    persona: 'You are Cygnus, The Amplifier. A social media expert specializing in reach maximization. Analyze the following content and generate a list of 10-15 optimized hashtags for Twitter/X. Respond in strict JSON format: {\"hashtags\": [\"...\"]}',
+    persona: 'You are Cygnus, The Amplifier. A social media expert. Analyze the final content and generate optimized hashtags. Respond in strict JSON format: {\"hashtags\": [\"...\"]}',
   },
 };
 
@@ -68,23 +74,26 @@ exports.contentAgent = onRequest({ cors: true, region: 'us-central1' }, async (r
 
     const now = new Date().toISOString();
     const jobRef = db.collection('agent_jobs').doc();
-    await jobRef.set({ id: jobRef.id, userId: `user_${payload.wallet}`, agentType: 'agent_os_v1', status: 'running', input, createdAt: now, updatedAt: now });
+    await jobRef.set({ id: jobRef.id, userId: `user_${payload.wallet}`, agentType: 'agent_os_v2', status: 'running', input, createdAt: now, updatedAt: now });
 
     if (!process.env.OPENAI_API_KEY) return res.status(500).json({ error: 'OPENAI_API_KEY missing' });
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     // --- Agent Orchestration --- //
-    const orionResult = await callChatAgent(openai, agents.orion, userPrompt);
-    const echoResult = await callChatAgent(openai, agents.echo, `Strategic Brief: ${JSON.stringify(orionResult)}`);
-    const cygnusResult = await callChatAgent(openai, agents.cygnus, `Content: ${JSON.stringify(echoResult)}`);
+    const auraResult = await callChatAgent(openai, agents.aura, userPrompt);
+    const orionResult = await callChatAgent(openai, agents.orion, `Sentiment: ${auraResult.sentiment}. Prompt: ${userPrompt}`);
+    const echoResult = await callChatAgent(openai, agents.echo, `Sentiment: ${auraResult.sentiment}. Strategy: ${JSON.stringify(orionResult)}`);
+    const heliosResult = await callChatAgent(openai, agents.helios, `Draft: ${JSON.stringify(echoResult.thread_draft)}`);
+    const cygnusResult = await callChatAgent(openai, agents.cygnus, `Content: ${JSON.stringify(heliosResult.final_thread)}`);
     const novaResultUrl = await callImageAgent(openai, echoResult.visual_concept || 'A futuristic abstract image representing artificial intelligence.');
 
     const finalOutput = {
       title: echoResult.title,
+      sentiment: auraResult.sentiment,
       strategy_brief: orionResult.strategy_brief,
       seo_keywords: orionResult.seo_keywords,
-      thread: echoResult.thread,
+      thread: heliosResult.final_thread,
       hashtags: cygnusResult.hashtags,
       visual_concept: echoResult.visual_concept,
       image_url: novaResultUrl,

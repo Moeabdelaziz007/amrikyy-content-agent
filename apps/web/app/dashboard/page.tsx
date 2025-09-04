@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Cpu, Zap, Activity, Lightbulb, Tags, MessageSquare, Image as ImageIcon, Loader2, Sparkles, User, Shield, BrainCircuit, BarChart } from 'lucide-react';
+import { Cpu, Zap, Activity, Lightbulb, Tags, MessageSquare, Image as ImageIcon, Loader2, Sparkles, User, Shield, BrainCircuit, BarChart, PenLine, Smile } from 'lucide-react';
 
 // --- Agent Type Definition ---
 interface Agent {
@@ -16,6 +16,14 @@ interface Agent {
 // --- Agent Definitions ---
 const agents: Agent[] = [
   {
+    id: 'aura',
+    name: 'Aura',
+    avatar: Smile,
+    persona: 'The Empath',
+    skills: ['Sentiment Analysis', 'Emotional Tone Detection'],
+    status: 'Online',
+  },
+  {
     id: 'orion',
     name: 'Orion',
     avatar: BrainCircuit,
@@ -29,6 +37,14 @@ const agents: Agent[] = [
     avatar: MessageSquare,
     persona: 'The Copywriter',
     skills: ['Viral Thread Crafting', 'Tone Adaptation', 'Storytelling'],
+    status: 'Online',
+  },
+  {
+    id: 'helios',
+    name: 'Helios',
+    avatar: PenLine,
+    persona: 'The Editor',
+    skills: ['Viral Hook Refinement', 'Engagement Maximization'],
     status: 'Online',
   },
   {
@@ -52,10 +68,11 @@ const agents: Agent[] = [
 // --- Mock API Response ---
 const mockApiResponse = {
   title: "The Quantum Leap in Decentralized AI",
+  sentiment: "Excited",
   strategy_brief: "Target emerging AI and crypto enthusiasts by framing decentralized AI as a paradigm shift in computing, using the quantum leap metaphor to signify a fundamental change.",
   seo_keywords: ["Decentralized AI", "Web3 AI", "Crypto AI", "Quantum Computing", "AI on Blockchain"],
   thread: [
-    "1/ The next evolution of AI isn\'t just about better algorithms; it\'s about where they live. We\'re moving from centralized servers to a decentralized, user-owned ecosystem. This is the quantum leap.",
+    "🚀 THIS is the quantum leap for AI. We\'re not just improving algorithms; we\'re changing their universe.",
     "2/ Think of it like this: Today\'s AI is like classical physics—predictable but limited by its environment. Decentralized AI is like quantum mechanics—opening up a new universe of possibilities.",
   ],
   hashtags: ["#DecentralizedAI", "#AI", "#Web3", "#Crypto", "#QuantumComputing", "#Blockchain"],
@@ -78,12 +95,10 @@ export default function AgentOSDashboard() {
     }, 2000);
   };
 
-  // Guard clause to prevent rendering if no agent is selected
   if (!selectedAgent) {
     return (
       <div className="min-h-screen bg-background-abyss flex items-center justify-center">
         <Loader2 className="w-12 h-12 text-accent-electric-jade animate-spin" />
-        <p className="ml-4 text-text-muted">Initializing Agent OS...</p>
       </div>
     );
   }
@@ -94,7 +109,7 @@ export default function AgentOSDashboard() {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Shield className="w-6 h-6 text-accent-electric-jade" />
-            <h1 className="text-xl font-bold">Agent Operating System</h1>
+            <h1 className="text-xl font-bold">Amrikyy AI Solutions</h1>
           </div>
           <div className="flex items-center gap-2 text-sm text-accent-electric-jade">
             <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>

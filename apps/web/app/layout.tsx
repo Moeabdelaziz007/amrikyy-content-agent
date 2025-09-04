@@ -3,22 +3,22 @@ import { headers } from 'next/headers';
 import Providers from './providers';
 
 export const metadata = {
-  title: 'AI + Crypto Autonomous Agents Hub',
-  description: 'Deploy intelligent agents that work 24/7, integrated with crypto payments and Web3 authentication',
-  keywords: 'AI, Crypto, Web3, Autonomous Agents, Content Generation, Trading Bots',
+  title: 'Amrikyy AI Solutions',
+  description: 'Deploy autonomous AI agent systems for content creation, marketing, and analysis.',
+  keywords: 'Amrikyy, AI Solutions, AI Agents, Autonomous Agents, Content Generation',
   authors: [{ name: 'Amrikyy' }],
   viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#00FFAA', // Updated to Electric Jade
+  themeColor: '#00FFAA',
   openGraph: {
-    title: 'AI + Crypto Autonomous Agents Hub',
-    description: 'Deploy intelligent agents that work 24/7, integrated with crypto payments and Web3 authentication',
+    title: 'Amrikyy AI Solutions',
+    description: 'Deploy autonomous AI agent systems for content creation, marketing, and analysis.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI + Crypto Autonomous Agents Hub',
-    description: 'Deploy intelligent agents that work 24/7, integrated with crypto payments and Web3 authentication',
+    title: 'Amrikyy AI Solutions',
+    description: 'Deploy autonomous AI agent systems for content creation, marketing, and analysis.',
   }
 };
 

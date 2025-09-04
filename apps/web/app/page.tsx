@@ -10,7 +10,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Sparkles className="w-6 h-6 text-accent-electric-jade" />
-            <h1 className="text-xl font-bold">Agent Operating System</h1>
+            <h1 className="text-xl font-bold">Amrikyy AI Solutions</h1>
           </div>
           <WalletConnect />
         </div>
