@@ -127,7 +127,7 @@ export default function AgentOSDashboard() {
             <div className="space-y-3">
               {agents.map(agent => (
                 <div key={agent.id} onClick={() => setSelectedAgent(agent)} className={`card-glass p-4 flex items-center gap-4 cursor-pointer transition-all duration-300 ${selectedAgent.id === agent.id ? 'border-accent-electric-jade' : ''}`}>
-                  <agent.avatar className={`w-8 h-8 transition-colors ${selectedAgent.id === agent.id ? 'text-accent-electric-jade' : 'text-text-muted'}`} />
+                  <agent.avatar className={`w-8 h-8 transition-colors ${selectedAgent.id === agent.id ? 'text-accent-electric-jade animate-pulse-glow' : 'text-text-muted'}`} />
                   <div>
                     <h3 className="font-bold text-lg">{agent.name}</h3>
                     <p className={`text-xs transition-colors ${selectedAgent.id === agent.id ? 'text-accent-electric-jade' : 'text-text-muted'}`}>{agent.status}</p>
@@ -150,7 +150,7 @@ export default function AgentOSDashboard() {
                 <h4 className="font-semibold text-text-muted mb-3">Core Skills:</h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedAgent.skills.map(skill => (
-                    <span key={skill} className="bg-surface-glass text-xs font-medium px-3 py-1 rounded-full border border-border-glow">{skill}</span>
+                    <span key={skill} className="bg-surface-glass text-xs font-medium px-3 py-1 rounded-full border border-border-glow skill-tag">{skill}</span>
                   ))}
                 </div>
               </div>
@@ -165,49 +165,53 @@ export default function AgentOSDashboard() {
                   {isLoading ? 'Executing...' : 'Engage Agents'}
                 </button>
               </div>
-            </div>
+            )}
 
             {isLoading && (
               <div className="card-glass flex flex-col items-center justify-center p-12">
-                <Loader2 className="w-12 h-12 text-accent-electric-jade animate-spin mb-4" />
+                <Loader2 className="w-12 h-12 text-accent-electric-jade animate-spin" />
                 <p className="text-text-muted">Agents are collaborating...</p>
               </div>
             )}
 
             {result && (
               <div className="space-y-4 animate-stagger">
-                <div className="card-glass" style={{ '--stagger-index': 1 } as React.CSSProperties}>
+                {result.title && <div className="card-glass" style={{ '--stagger-index': 1 } as React.CSSProperties}>
                   <h3 className="text-xl font-bold text-accent-electric-jade mb-3">{result.title}</h3>
-                  <img src={result.image_url} alt={result.visual_concept} className="w-full rounded-lg" />
-                  <p className="text-sm text-text-muted italic mt-2">Visual Concept: {result.visual_concept}</p>
-                </div>
-                <div className="card-glass" style={{ '--stagger-index': 2 } as React.CSSProperties}>
+                  {result.image_url && <img src={result.image_url} alt={result.visual_concept || 'Generated Image'} className="w-full rounded-lg" />}
+                  {result.visual_concept && <p className="text-sm text-text-muted italic mt-2">Visual Concept: {result.visual_concept}</p>}
+                </div>}
+
+                {result.sentiment && <div className="card-glass" style={{ '--stagger-index': 2 } as React.CSSProperties}>
+                  <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Smile className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Sentiment Analysis</span></div>
+                  <p className="text-2xl font-bold text-accent-cyber-pink">{result.sentiment}</p>
+                </div>}
+
+                {result.strategy_brief && <div className="card-glass" style={{ '--stagger-index': 3 } as React.CSSProperties}>
                   <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Lightbulb className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Strategy Brief</span></div>
                   <p className="text-sm">{result.strategy_brief}</p>
-                </div>
-                <div className="card-glass" style={{ '--stagger-index': 3 } as React.CSSProperties}>
+                </div>}
+
+                {result.thread && <div className="card-glass" style={{ '--stagger-index': 4 } as React.CSSProperties}>
                   <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><MessageSquare className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Generated Thread</span></div>
                   <div className="space-y-3">
                     {result.thread.map((tweet: string, i: number) => <p key={i} className="text-sm bg-background-abyss/50 p-3 rounded-lg">{tweet}</p>)}                  
                   </div>
-                </div>
-                <div className="card-glass" style={{ '--stagger-index': 4 } as React.CSSProperties}>
-                  <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Smile className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Sentiment</span></div>
-                  <p className="text-sm">{result.sentiment}</p>
-                </div>
+                </div>}
+
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="card-glass" style={{ '--stagger-index': 5 } as React.CSSProperties}>
+                  {result.seo_keywords && <div className="card-glass" style={{ '--stagger-index': 5 } as React.CSSProperties}>
                     <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Tags className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">SEO Keywords</span></div>
                     <div className="flex flex-wrap gap-2">
-                      {result.seo_keywords.map((kw: string) => <span key={kw} className="bg-surface-glass text-xs font-medium px-2 py-1 rounded-full border border-border-glow">{kw}</span>)}
+                      {result.seo_keywords.map((kw: string) => <span key={kw} className="bg-surface-glass text-xs font-medium px-2 py-1 rounded-full border border-border-glow skill-tag">{kw}</span>)}
                     </div>
-                  </div>
-                  <div className="card-glass" style={{ '--stagger-index': 6 } as React.CSSProperties}>
+                  </div>}
+                  {result.hashtags && <div className="card-glass" style={{ '--stagger-index': 6 } as React.CSSProperties}>
                     <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Activity className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Hashtags</span></div>
                     <div className="flex flex-wrap gap-2">
                       {result.hashtags.map((tag: string) => <span key={tag} className="text-accent-cyber-pink text-xs font-medium">{tag}</span>)}
-                    }
-                  </div>
+                    </div>
+                  </div>}
                 </div>
               </div>
             )}

@@ -52,10 +52,16 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 10px var(--border-glow);
+  position: relative; /* For active state */
+  overflow: hidden; /* For active state */
 }
 .btn-glow:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 20px var(--accent-electric-jade), 0 0 10px var(--accent-cyber-pink);
+}
+.btn-glow:active {
+  transform: translateY(0);
+  box-shadow: 0 0 5px var(--accent-electric-jade);
 }
 
 .card-glass {
@@ -70,6 +76,7 @@ body {
 }
 .card-glass:hover {
   border-color: var(--border-strong);
+  box-shadow: 0 0 15px var(--border-strong);
 }
 
 .input-glass {
@@ -83,10 +90,19 @@ body {
 .input-glass:focus {
   outline: none;
   border-color: var(--accent-electric-jade);
-  box-shadow: 0 0 10px var(--border-glow);
+  box-shadow: 0 0 15px var(--accent-electric-jade), 0 0 5px var(--accent-cyber-pink);
 }
 
 /* Animation utility for staggered children */
 .animate-stagger > * {
   animation-delay: calc(var(--stagger-index) * 100ms);
+}
+
+/* Skill Tag Hover Glow */
+.skill-tag {
+  transition: all 0.3s ease;
+}
+.skill-tag:hover {
+  box-shadow: 0 0 8px var(--accent-electric-jade);
+  border-color: var(--accent-electric-jade);
 }
