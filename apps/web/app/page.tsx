@@ -1,93 +1,63 @@
-// No React import needed in Next.js 13+ App Router
 import Link from 'next/link';
 import WalletConnect from './components/WalletConnect';
-import { Zap, Shield, Cpu, ArrowRight } from 'lucide-react';
+import { Zap, Shield, Cpu, ArrowRight, Sparkles } from 'lucide-react';
 
-export default function Page() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-cyber-bg">
+    <div className="min-h-screen bg-background-abyss text-text-bright">
+      {/* Header */}
+      <header className="bg-surface-glass/50 backdrop-filter backdrop-blur-lg border-b border-border-glow sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-6 h-6 text-accent-electric-jade" />
+            <h1 className="text-xl font-bold">Agent Operating System</h1>
+          </div>
+          <WalletConnect />
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-20">
-        <div className="text-center">
-          {/* Main Title */}
-          <div className="mb-8">
-            <h1 className="text-6xl font-bold mb-4">
-              AI + Crypto
-              <span className="block text-cyber-accent">Autonomous Agents</span>
-            </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-cyber-accent to-cyber-accent-secondary mx-auto rounded-full"></div>
-          </div>
-          
-          {/* Subtitle */}
-          <p className="text-xl text-cyber-text-secondary mb-16 max-w-3xl mx-auto leading-relaxed">
-            Deploy intelligent agents that work 24/7, integrated with crypto payments and Web3 authentication. 
-            Built for developers who demand control and efficiency.
-          </p>
+      <main className="container mx-auto px-6 py-24 text-center">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in-up">
+          The Dawn of the
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-electric-jade to-accent-cyber-pink"> Agentic Era</span>
+        </h1>
+        <p className="text-lg text-text-muted max-w-3xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          Deploy autonomous AI agents that create, optimize, and amplify your content. Welcome to the future of digital strategy.
+        </p>
+        <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <Link href="/dashboard" className="btn-glow inline-flex items-center gap-2 text-lg">
+            Launch Agent OS <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </main>
 
-          {/* Features Grid */}
-          <div className="grid-cyber grid-cyber-3 mb-16">
-            <div className="card-cyber text-center group">
-              <div className="w-16 h-16 bg-cyber-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyber-accent/30 transition-colors">
-                <Cpu className="w-8 h-8 text-cyber-accent" />
-              </div>
-              <h3 className="text-xl font-semibold text-cyber-text mb-2">AI Agents</h3>
-              <p className="text-cyber-text-secondary">Content generation, trading, and analysis agents running autonomously</p>
+      {/* Features Section */}
+      <section className="container mx-auto px-6 pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-stagger">
+          <div className="card-glass p-8 text-center" style={{ '--stagger-index': 1 } as React.CSSProperties}>
+            <div className="w-16 h-16 bg-surface-glass border border-border-glow rounded-full flex items-center justify-center mx-auto mb-4">
+              <Cpu className="w-8 h-8 text-accent-electric-jade" />
             </div>
-            
-            <div className="card-cyber text-center group">
-              <div className="w-16 h-16 bg-cyber-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyber-accent/30 transition-colors">
-                <Shield className="w-8 h-8 text-cyber-accent" />
-              </div>
-              <h3 className="text-xl font-semibold text-cyber-text mb-2">Web3 Security</h3>
-              <p className="text-cyber-text-secondary">SIWE authentication and crypto-native payment integration</p>
-            </div>
-            
-            <div className="card-cyber text-center group">
-              <div className="w-16 h-16 bg-cyber-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyber-accent/30 transition-colors">
-                <Zap className="w-8 h-8 text-cyber-accent" />
-              </div>
-              <h3 className="text-xl font-semibold text-cyber-text mb-2">Lightning Fast</h3>
-              <p className="text-cyber-text-secondary">Optimized for speed and efficiency with real-time processing</p>
-            </div>
+            <h3 className="text-xl font-semibold mb-2">Autonomous Agents</h3>
+            <p className="text-text-muted">A team of specialized AIs working in concert to execute complex content strategies.</p>
           </div>
-
-          {/* CTA Section */}
-          <div className="space-y-8">
-            <WalletConnect />
-            
-            <div className="flex flex-col items-center space-y-4">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-cyber-text mb-2">Ready to Deploy?</h3>
-                <p className="text-cyber-text-secondary text-sm max-w-md">
-                  Connect your wallet and start generating content with AI agents in seconds
-                </p>
-              </div>
-              
-              <div className="flex justify-center space-x-4">
-                <Link
-                  href="/dashboard"
-                  className="btn-cyber flex items-center space-x-2 group"
-                >
-                  <span>Launch Dashboard</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                
-                <button className="px-6 py-3 border border-cyber-border text-cyber-text-secondary hover:text-cyber-text hover:border-cyber-accent rounded-lg transition-colors">
-                  View Docs
-                </button>
-              </div>
+          <div className="card-glass p-8 text-center" style={{ '--stagger-index': 2 } as React.CSSProperties}>
+            <div className="w-16 h-16 bg-surface-glass border border-border-glow rounded-full flex items-center justify-center mx-auto mb-4">
+              <Shield className="w-8 h-8 text-accent-electric-jade" />
             </div>
+            <h3 className="text-xl font-semibold mb-2">Web3 Native</h3>
+            <p className="text-text-muted">Securely connect with SIWE. The entire system is built for the decentralized future.</p>
           </div>
-
-          {/* Status Indicator */}
-          <div className="mt-16 flex items-center justify-center space-x-2 text-cyber-text-secondary">
-            <div className="w-2 h-2 bg-cyber-success rounded-full animate-cyber-pulse"></div>
-            <span className="text-sm">System Online • Ready for Deployment</span>
+          <div className="card-glass p-8 text-center" style={{ '--stagger-index': 3 } as React.CSSProperties}>
+            <div className="w-16 h-16 bg-surface-glass border border-border-glow rounded-full flex items-center justify-center mx-auto mb-4">
+              <Zap className="w-8 h-8 text-accent-electric-jade" />
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Dynamic & Fast</h3>
+            <p className="text-text-muted">A highly responsive and animated interface designed for a seamless user experience.</p>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
-
-/* Run: npm run dev */
