@@ -106,3 +106,30 @@ body {
   box-shadow: 0 0 8px var(--accent-electric-jade);
   border-color: var(--accent-electric-jade);
 }
+
+/* Agent Avatar Badge Styles */
+.agent-avatar-badge {
+  width: 48px; /* w-12 */
+  height: 48px; /* h-12 */
+  background-color: var(--surface-glass);
+  border: 1px solid var(--border-glow);
+  border-radius: 50%; /* Make it circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.agent-avatar-badge-lg {
+  width: 80px; /* w-20 */
+  height: 80px; /* h-20 */
+  background-color: var(--surface-glass);
+  border: 2px solid var(--border-glow);
+  border-radius: 50%; /* Make it circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
