@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "commit": "^0.0.4",
+    "firebase-tools": "^14.15.2",
     "git": "^0.1.5"
   }
 }
