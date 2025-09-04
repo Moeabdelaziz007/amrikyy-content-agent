@@ -3,8 +3,18 @@
 import { useState } from 'react';
 import { Cpu, Zap, Activity, Lightbulb, Tags, MessageSquare, Image as ImageIcon, Loader2, Sparkles, User, Shield, BrainCircuit, BarChart } from 'lucide-react';
 
+// --- Agent Type Definition ---
+interface Agent {
+  id: string;
+  name: string;
+  avatar: React.ElementType;
+  persona: string;
+  skills: string[];
+  status: string;
+}
+
 // --- Agent Definitions ---
-const agents = [
+const agents: Agent[] = [
   {
     id: 'orion',
     name: 'Orion',
@@ -54,7 +64,7 @@ const mockApiResponse = {
 };
 
 export default function AgentOSDashboard() {
-  const [selectedAgent, setSelectedAgent] = useState(agents[0]);
+  const [selectedAgent, setSelectedAgent] = useState<Agent | undefined>(agents[0]);
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -62,18 +72,21 @@ export default function AgentOSDashboard() {
   const handleGenerate = async () => {
     setIsLoading(true);
     setResult(null);
-
-    // This is where the real API call will go.
-    // For now, we simulate it.
-    // const response = await fetch('/api/agent', { method: 'POST', body: JSON.stringify({ prompt }) });
-    // const data = await response.json();
-    // setResult(data.result.output);
-
     setTimeout(() => {
       setResult(mockApiResponse);
       setIsLoading(false);
     }, 2000);
   };
+
+  // Guard clause to prevent rendering if no agent is selected
+  if (!selectedAgent) {
+    return (
+      <div className="min-h-screen bg-background-abyss flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-accent-electric-jade animate-spin" />
+        <p className="ml-4 text-text-muted">Initializing Agent OS...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background-abyss text-text-bright font-sans">
@@ -130,7 +143,7 @@ export default function AgentOSDashboard() {
             <div className="card-glass p-6">
               <h3 className="text-lg font-semibold mb-4">Delegate Task to the Team</h3>
               <div className="space-y-4">
-                <textarea placeholder="Brief the agent team on the objective..." className="input-glass w-full h-28 resize-none text-base" onChange={(e) => setPrompt(e.target.value)} />
+                <textarea placeholder={`Brief the agent team on the objective...`} className="input-glass w-full h-28 resize-none text-base" onChange={(e) => setPrompt(e.target.value)} />
                 <button onClick={handleGenerate} disabled={isLoading} className="btn-glow w-full flex items-center justify-center gap-2 text-lg">
                   {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6" />}
                   {isLoading ? 'Executing...' : 'Engage Agents'}
