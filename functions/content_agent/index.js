@@ -9,23 +9,41 @@ const db = getFirestore();
 
 const JWT_SECRET = new TextEncoder().encode(process.env.SIWE_JWT_SECRET || 'dev-secret');
 
-// Helper function for making OpenAI Chat API calls
-async function callOpenAIChat(openai, messages, response_format = { type: "json_object" }) {
+// --- Virtual Agent Definitions ---
+const agents = {
+  orion: {
+    persona: 'You are Orion, The Strategist. A world-class SEO and market trend analyst. Your task is to analyze a user\'s prompt and generate a strategic brief for creating viral content. Identify the core topic, the target audience, and a list of 5-7 high-impact SEO keywords. Respond in strict JSON format: {\"strategy_brief\": \"...\", \"seo_keywords\": [\"...\"]}',
+  },
+  echo: {
+    persona: 'You are Echo, The Copywriter. A master viral content creator. Your task is to take a strategic brief and write a compelling, engaging Twitter thread. The tone should be professional and insightful. You must also create a \"visual_concept\" which is a detailed, literal, and vivid description of an image suitable for a text-to-image AI. Respond in strict JSON format: {\"title\": \"...\", \"thread\": [\"...\"], \"visual_concept\": \"...\"}',
+  },
+  nova: {
+    persona: 'You are Nova, The Visionary. An artistic AI that generates stunning visuals. Your only task is to create an image based on a visual concept.',
+  },
+  cygnus: {
+    persona: 'You are Cygnus, The Amplifier. A social media expert specializing in reach maximization. Analyze the following content and generate a list of 10-15 optimized hashtags for Twitter/X. Respond in strict JSON format: {\"hashtags\": [\"...\"]}',
+  },
+};
+
+// --- OpenAI API Callers ---
+async function callChatAgent(openai, agent, userContent) {
   const completion = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-    messages,
+    messages: [
+      { role: 'system', content: agent.persona },
+      { role: 'user', content: userContent },
+    ],
     temperature: 0.7,
     max_tokens: 1500,
-    response_format,
+    response_format: { type: "json_object" },
   });
-  return completion;
+  return JSON.parse(completion.choices[0].message.content || '{}');
 }
 
-// Helper function for making OpenAI Image API calls
-async function callOpenAIImage(openai, prompt) {
+async function callImageAgent(openai, prompt) {
   const response = await openai.images.generate({
     model: "dall-e-3",
-    prompt: prompt,
+    prompt: `Create a visually stunning image based on this concept: "${prompt}" Style: futuristic, digital art, high quality.`,
     n: 1,
     size: "1024x1024",
     quality: "standard",
@@ -33,110 +51,51 @@ async function callOpenAIImage(openai, prompt) {
   return response.data[0].url;
 }
 
+// --- Main Orchestrator Function ---
 exports.contentAgent = onRequest({ cors: true, region: 'us-central1' }, async (req, res) => {
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method not allowed' });
-    }
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     const auth = req.headers['authorization'];
-    if (!auth || !auth.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Missing auth' });
-    }
+    if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ error: 'Missing auth' });
 
     const token = auth.slice(7);
     const { payload } = await jwtVerify(token, JWT_SECRET);
-    const wallet = payload && payload.wallet;
-    if (!wallet) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
+    if (!payload || !payload.wallet) return res.status(401).json({ error: 'Invalid token' });
 
     const input = req.body.input || {};
     const userPrompt = input.prompt || 'The future of decentralized AI';
-    const userTone = input.tone || 'professional and insightful';
 
     const now = new Date().toISOString();
     const jobRef = db.collection('agent_jobs').doc();
-    const jobId = jobRef.id;
+    await jobRef.set({ id: jobRef.id, userId: `user_${payload.wallet}`, agentType: 'agent_os_v1', status: 'running', input, createdAt: now, updatedAt: now });
 
-    await jobRef.set({
-      id: jobId,
-      userId: `user_${wallet}`,
-      agentType: 'viral_content_media_engineer_v1', // New agent type
-      status: 'running',
-      input,
-      createdAt: now,
-      updatedAt: now
-    });
-
-    if (!process.env.OPENAI_API_KEY) {
-      return res.status(500).json({ error: 'OPENAI_API_KEY missing' });
-    }
+    if (!process.env.OPENAI_API_KEY) return res.status(500).json({ error: 'OPENAI_API_KEY missing' });
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-    // --- Agent Tool Chain --- //
+    // --- Agent Orchestration --- //
+    const orionResult = await callChatAgent(openai, agents.orion, userPrompt);
+    const echoResult = await callChatAgent(openai, agents.echo, `Strategic Brief: ${JSON.stringify(orionResult)}`);
+    const cygnusResult = await callChatAgent(openai, agents.cygnus, `Content: ${JSON.stringify(echoResult)}`);
+    const novaResultUrl = await callImageAgent(openai, echoResult.visual_concept || 'A futuristic abstract image representing artificial intelligence.');
 
-    // Step 1: SEO & Search Tool
-    const analysisMessages = [
-      { role: 'system', content: 'You are a world-class SEO and market trend analyst. Your task is to analyze a user\'s prompt and generate a strategic brief for creating viral content. Identify the core topic, the target audience, and a list of 5-7 high-impact SEO keywords. Respond in strict JSON format: {\"strategy_brief\": \"...\", \"seo_keywords\": [\"...\"]}' },
-      { role: 'user', content: userPrompt }
-    ];
-    const analysisCompletion = await callOpenAIChat(openai, analysisMessages);
-    const analysisResult = JSON.parse(analysisCompletion.choices[0].message.content || '{}');
-
-    // Step 2: Content & Visual Concept Generation Tool
-    const contentMessages = [
-      { role: 'system', content: `You are a master viral content creator. Your task is to take a strategic brief and write a compelling, engaging Twitter thread. The tone should be ${userTone}. You must also create a \"visual_concept\" which is a detailed, literal, and vivid description of an image suitable for a text-to-image AI like DALL-E. Respond in strict JSON format: {\"title\": \"...\", \"thread\": [\"...\"], \"visual_concept\": \"...\"}` },
-      { role: 'user', content: `Strategic Brief: ${JSON.stringify(analysisResult)}` }
-    ];
-    const contentCompletion = await callOpenAIChat(openai, contentMessages);
-    const contentResult = JSON.parse(contentCompletion.choices[0].message.content || '{}');
-
-    // Step 3: Hashtag Tool
-    const hashtagMessages = [
-      { role: 'system', content: 'You are a social media expert specializing in reach maximization. Analyze the following content and generate a list of 10-15 optimized hashtags for Twitter/X. Respond in strict JSON format: {\"hashtags\": [\"...\"]}' },
-      { role: 'user', content: `Content: ${JSON.stringify(contentResult)}` }
-    ];
-    const hashtagCompletion = await callOpenAIChat(openai, hashtagMessages);
-    const hashtagResult = JSON.parse(hashtagCompletion.choices[0].message.content || '{}');
-
-    // Step 4: Image Generation Tool
-    const imageUrl = await callOpenAIImage(openai, contentResult.visual_concept || 'A futuristic abstract image representing artificial intelligence and cryptocurrency.');
-
-    // --- Final Output Assembly ---
     const finalOutput = {
-      title: contentResult.title,
-      strategy_brief: analysisResult.strategy_brief,
-      seo_keywords: analysisResult.seo_keywords,
-      thread: contentResult.thread,
-      hashtags: hashtagResult.hashtags,
-      visual_concept: contentResult.visual_concept,
-      image_url: imageUrl,
+      title: echoResult.title,
+      strategy_brief: orionResult.strategy_brief,
+      seo_keywords: orionResult.seo_keywords,
+      thread: echoResult.thread,
+      hashtags: cygnusResult.hashtags,
+      visual_concept: echoResult.visual_concept,
+      image_url: novaResultUrl,
     };
 
     const resultRef = db.collection('job_results').doc();
-    const resultId = resultRef.id;
-    const result = {
-      id: resultId,
-      jobId,
-      userId: `user_${wallet}`,
-      output: finalOutput,
-      model: contentCompletion.model, // Note: model for text part
-      createdAt: new Date().toISOString()
-    };
-    await resultRef.set(result);
+    await resultRef.set({ id: resultRef.id, jobId: jobRef.id, userId: `user_${payload.wallet}`, output: finalOutput, createdAt: new Date().toISOString() });
 
-    const totalTokens = (analysisCompletion.usage?.total_tokens || 0) + (contentCompletion.usage?.total_tokens || 0) + (hashtagCompletion.usage?.total_tokens || 0);
+    await jobRef.update({ status: 'completed', resultRef: resultRef.path, updatedAt: new Date().toISOString() });
 
-    await jobRef.update({
-      status: 'completed',
-      resultRef: `job_results/${resultId}`,
-      updatedAt: new Date().toISOString(),
-      tokens: totalTokens,
-    });
-
-    res.status(200).json({ jobId, status: 'completed', result });
+    res.status(200).json({ jobId: jobRef.id, status: 'completed', result: { output: finalOutput } });
 
   } catch (e) {
     console.error(e);
