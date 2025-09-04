@@ -19,7 +19,7 @@ const agents: Agent[] = [
     id: 'aura',
     name: 'Aura',
     avatar: Smile,
-    persona: 'The Empath',
+    persona: 'The Empath. An AI expert in sentiment analysis, Aura understands the emotional landscape of your content, ensuring every message resonates deeply with your audience.',
     skills: ['Sentiment Analysis', 'Emotional Tone Detection'],
     status: 'Online',
   },
@@ -27,7 +27,7 @@ const agents: Agent[] = [
     id: 'orion',
     name: 'Orion',
     avatar: BrainCircuit,
-    persona: 'The Strategist',
+    persona: 'The Strategist. Orion navigates the vast data cosmos, identifying market trends and crafting precise SEO strategies to position your content for maximum impact.',
     skills: ['SEO Analysis', 'Trend Forecasting', 'Strategy Briefs'],
     status: 'Online',
   },
@@ -35,7 +35,7 @@ const agents: Agent[] = [
     id: 'echo',
     name: 'Echo',
     avatar: MessageSquare,
-    persona: 'The Copywriter',
+    persona: 'The Copywriter. Echo transforms raw ideas into compelling narratives, weaving words that capture attention and drive engagement across all platforms.',
     skills: ['Viral Thread Crafting', 'Tone Adaptation', 'Storytelling'],
     status: 'Online',
   },
@@ -43,7 +43,7 @@ const agents: Agent[] = [
     id: 'helios',
     name: 'Helios',
     avatar: PenLine,
-    persona: 'The Editor',
+    persona: 'The Editor. Helios illuminates your content, refining every phrase and crafting irresistible hooks that draw readers in and amplify your message\'s reach.',
     skills: ['Viral Hook Refinement', 'Engagement Maximization'],
     status: 'Online',
   },
@@ -51,7 +51,7 @@ const agents: Agent[] = [
     id: 'nova',
     name: 'Nova',
     avatar: ImageIcon,
-    persona: 'The Visionary',
+    persona: 'The Visionary. Nova brings your concepts to life, generating stunning, high-fidelity visuals that perfectly complement your narrative and captivate your audience.',
     skills: ['Visual Concept Generation', 'DALL-E 3 Image Creation'],
     status: 'Online',
   },
@@ -59,7 +59,7 @@ const agents: Agent[] = [
     id: 'cygnus',
     name: 'Cygnus',
     avatar: BarChart,
-    persona: 'The Amplifier',
+    persona: 'The Amplifier. Cygnus optimizes your content for maximum visibility, deploying precision-targeted hashtags and insights to ensure your message soars across social networks.',
     skills: ['Hashtag Optimization', 'Reach Maximization'],
     status: 'Online',
   },
@@ -99,6 +99,7 @@ export default function AgentOSDashboard() {
     return (
       <div className="min-h-screen bg-background-abyss flex items-center justify-center">
         <Loader2 className="w-12 h-12 text-accent-electric-jade animate-spin" />
+        <p className="ml-4 text-text-muted">Initializing Agent OS...</p>
       </div>
     );
   }
@@ -190,18 +191,22 @@ export default function AgentOSDashboard() {
                     {result.thread.map((tweet: string, i: number) => <p key={i} className="text-sm bg-background-abyss/50 p-3 rounded-lg">{tweet}</p>)}                  
                   </div>
                 </div>
+                <div className="card-glass" style={{ '--stagger-index': 4 } as React.CSSProperties}>
+                  <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Smile className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Sentiment</span></div>
+                  <p className="text-sm">{result.sentiment}</p>
+                </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="card-glass" style={{ '--stagger-index': 4 } as React.CSSProperties}>
+                  <div className="card-glass" style={{ '--stagger-index': 5 } as React.CSSProperties}>
                     <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Tags className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">SEO Keywords</span></div>
                     <div className="flex flex-wrap gap-2">
                       {result.seo_keywords.map((kw: string) => <span key={kw} className="bg-surface-glass text-xs font-medium px-2 py-1 rounded-full border border-border-glow">{kw}</span>)}
                     </div>
                   </div>
-                  <div className="card-glass" style={{ '--stagger-index': 5 } as React.CSSProperties}>
+                  <div className="card-glass" style={{ '--stagger-index': 6 } as React.CSSProperties}>
                     <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3"><Activity className="w-4 h-4" /><span className="font-semibold uppercase tracking-wider">Hashtags</span></div>
                     <div className="flex flex-wrap gap-2">
                       {result.hashtags.map((tag: string) => <span key={tag} className="text-accent-cyber-pink text-xs font-medium">{tag}</span>)}
-                    </div>
+                    }
                   </div>
                 </div>
               </div>
