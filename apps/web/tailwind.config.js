@@ -14,37 +14,29 @@ module.exports = {
         sans: ['Inter', ...fontFamily.sans]
       },
       colors: {
-        background: {
-          'deep-space': 'var(--background-deep-space)',
-          'quantum-grid': 'var(--background-quantum-grid)',
-          surface: 'var(--background-surface)',
+        background: 'var(--background-default)',
+        surface: {
+          raised: 'var(--surface-raised)',
+          overlay: 'var(--surface-overlay)',
         },
         accent: {
-          'neon-green': 'var(--accent-neon-green)',
-          'quantum-blue': 'var(--accent-quantum-blue)',
-          'space-purple': 'var(--accent-space-purple)',
+          primary: 'var(--accent-primary)',
+          'primary-hover': 'var(--accent-primary-hover)',
+          secondary: 'var(--accent-secondary)',
         },
         text: {
           primary: 'var(--text-primary)',
           secondary: 'var(--text-secondary)',
-          accent: 'var(--text-accent)',
+          disabled: 'var(--text-disabled)',
         },
         border: {
-          color: 'var(--border-color)',
-          hover: 'var(--border-hover)',
+          subtle: 'var(--border-subtle)',
+          interactive: 'var(--border-interactive)',
+          focus: 'var(--border-focus)',
         },
       },
       boxShadow: {
-        'neon-glow': '0 0 15px var(--accent-neon-glow)',
-      },
-      animation: {
-        'cyber-pulse': 'cyber-pulse 2s ease-in-out infinite',
-      },
-      keyframes: {
-        'cyber-pulse': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.5' },
-        },
+        'focus-ring': '0 0 0 3px rgba(0, 230, 118, 0.2)',
       },
     }
   },

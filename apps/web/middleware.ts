@@ -7,7 +7,8 @@ const WHITELIST = (process.env.ALPHA_WHITELIST || '').toLowerCase().split(',').m
 const SIWE_JWT_SECRET = process.env.SIWE_JWT_SECRET;
 
 async function getWalletAddress(req: NextRequest): Promise<string | null> {
-    const token = req.cookies.get('auth_token')?.value;
+    // BUG FIX: Changed cookie name from 'auth_token' to 'siwe_jwt' to match the auth API.
+    const token = req.cookies.get('siwe_jwt')?.value;
     if (!token || !SIWE_JWT_SECRET) {
         return null;
     }
@@ -25,7 +26,7 @@ export async function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
 
     // Allow access to the denied page and authentication API routes
-    if (pathname.startsWith('/alpha-denied') || pathname.startsWith('/api/auth')) {
+    if (pathname.startsWith('/alpha-denied') || pathname.startsWith('/api/auth') || pathname.startsWith('/api/siwe')) {
         return NextResponse.next();
     }
 
