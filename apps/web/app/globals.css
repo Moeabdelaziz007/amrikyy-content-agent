@@ -2,128 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme: High-Quality Tech */
+/* Theme: Electric Soul */
 :root {
-  /* Professional Color Palette */
-  --background-default: #0A0A0A; /* Near-black for depth */
-  --surface-raised: #141414; /* For cards and elevated surfaces */
-  --surface-overlay: #1F1F1F; /* For modals or popovers */
+  /* Vibrant Color Palette */
+  --background-abyss: #010104;
+  --surface-glass: rgba(10, 10, 20, 0.5);
+  --accent-electric-jade: #00FFAA;
+  --accent-cyber-pink: #FF00AA;
+  --text-bright: #FFFFFF;
+  --text-muted: #8899AA;
+  --border-glow: rgba(0, 255, 170, 0.3);
+  --border-strong: rgba(0, 255, 170, 0.7);
+}
 
-  /* Primary Accent (Tech Green) */
-  --accent-primary: #00E676;
-  --accent-primary-hover: #33FF99;
-
-  /* Secondary Accent (Professional Blue) */
-  --accent-secondary: #007BFF;
-
-  /* Text Colors */
-  --text-primary: #F5F5F5; /* Slightly off-white for readability */
-  --text-secondary: #A3A3A3; /* For subtitles and secondary info */
-  --text-disabled: #525252;
-
-  /* Border & Focus */
-  --border-subtle: #262626;
-  --border-interactive: #525252;
-  --border-focus: var(--accent-primary);
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 5px var(--accent-electric-jade); }
+  50% { box-shadow: 0 0 15px var(--accent-electric-jade); }
+}
+@keyframes background-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Base Styles */
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
 body {
-  color: var(--text-primary);
-  background-color: var(--background-default);
-  min-height: 100vh;
+  color: var(--text-bright);
+  background-color: var(--background-abyss);
+  background-image: linear-gradient(45deg, var(--accent-electric-jade) 0%, var(--accent-cyber-pink) 100%);
+  background-size: 200% 200%;
+  animation: background-pan 15s ease infinite;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background-default);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-interactive);
-}
+/* --- Eye-Catching UI Components --- */
 
-/* Professional Typography */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-p { color: var(--text-secondary); line-height: 1.6; }
-
-/* --- Professional UI Components --- */
-
-/* Primary Button */
-.btn-primary {
-  background-color: var(--accent-primary);
-  color: #000000;
+.btn-glow {
+  background: linear-gradient(90deg, var(--accent-electric-jade), var(--accent-cyber-pink));
+  color: var(--text-bright);
+  border: none;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  border: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px var(--border-glow);
 }
-.btn-primary:hover {
-  background-color: var(--accent-primary-hover);
-  transform: translateY(-2px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background-color: transparent;
-  color: var(--text-primary);
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  border: 1px solid var(--border-interactive);
-}
-.btn-secondary:hover {
-  background-color: var(--surface-raised);
-  border-color: var(--text-secondary);
+.btn-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px var(--accent-electric-jade), 0 0 10px var(--accent-cyber-pink);
 }
 
-/* Card */
-.card-default {
-  background-color: var(--surface-raised);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+.card-glass {
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glow);
+  border-radius: 16px;
   padding: 24px;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease-out forwards;
 }
-.card-default:hover {
-  border-color: var(--border-interactive);
+.card-glass:hover {
+  border-color: var(--border-strong);
 }
 
-/* Input Field */
-.input-default {
-  background-color: var(--background-default);
-  border: 1px solid var(--border-interactive);
+.input-glass {
+  background-color: var(--surface-glass);
+  border: 1px solid var(--border-glow);
   border-radius: 8px;
   padding: 12px 16px;
-  color: var(--text-primary);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: var(--text-bright);
+  transition: all 0.3s ease;
 }
-.input-default:focus {
+.input-glass:focus {
   outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.2);
+  border-color: var(--accent-electric-jade);
+  box-shadow: 0 0 10px var(--border-glow);
+}
+
+/* Animation utility for staggered children */
+.animate-stagger > * {
+  animation-delay: calc(var(--stagger-index) * 100ms);
 }

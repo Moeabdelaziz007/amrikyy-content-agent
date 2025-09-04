@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Cpu, Zap, Activity, TrendingUp, Copy, History, Clock, Lightbulb, Tags, MessageSquare, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Cpu, Zap, Activity, Lightbulb, Tags, MessageSquare, Image as ImageIcon, Loader2, Sparkles } from 'lucide-react';
 
 // Mock result for demonstration purposes
 const mockResult = {
@@ -17,15 +17,14 @@ const mockResult = {
   image_url: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-xxxxxxxx/user-xxxxxxxx/img-xxxxxxxx.png?st=2023-01-01T00%3A00%3A00Z&se=2023-01-02T00%3A00%3A00Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&sktid=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&sks=b&sig=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%3D",
 };
 
-export default function SmartAgentDashboard() {
+export default function ElectricAgentDashboard() {
   const [prompt, setPrompt] = useState('');
-  const [tone, setTone] = useState('professional');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
   const handleGenerate = () => {
     setIsLoading(true);
-    // Simulate API call
+    setResult(null); // Clear previous results
     setTimeout(() => {
       setResult(mockResult);
       setIsLoading(false);
@@ -33,65 +32,42 @@ export default function SmartAgentDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-primary font-sans">
+    <div className="min-h-screen bg-background-abyss text-text-bright font-sans">
       {/* Header */}
-      <header className="border-b border-border-subtle">
+      <header className="bg-surface-glass/50 backdrop-filter backdrop-blur-lg border-b border-border-glow sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center border border-border-subtle">
-              <Cpu className="w-5 h-5 text-accent-primary" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-text-primary">Smart Agent Dashboard</h1>
-              <p className="text-sm text-text-secondary">Viral Content & Media Engineer</p>
-            </div>
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-6 h-6 text-accent-electric-jade animate-pulse-glow" />
+            <h1 className="text-xl font-bold text-text-bright">Electric Soul Dashboard</h1>
           </div>
-          <div className="flex items-center gap-2 text-sm text-text-secondary">
-            <div className="w-2 h-2 bg-accent-primary rounded-full animate-pulse"></div>
+          <div className="flex items-center gap-2 text-sm text-accent-electric-jade">
+            <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>
             System Online
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
 
           {/* Left Column: Control Panel */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="card-default p-6">
+          <div className="lg:col-span-2">
+            <div className="card-glass p-6">
               <div className="flex items-center gap-3 mb-4">
-                <Zap className="w-5 h-5 text-accent-primary" />
-                <h2 className="text-lg font-semibold">Control Panel</h2>
+                <Zap className="w-5 h-5 text-accent-electric-jade" />
+                <h2 className="text-lg font-semibold">Agent Control</h2>
               </div>
-
               <div className="space-y-4">
-                <div>
-                  <label htmlFor="prompt" className="block text-sm font-medium text-text-secondary mb-2">Your Prompt</label>
-                  <textarea
-                    id="prompt"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="e.g., The future of decentralized AI"
-                    className="input-default w-full h-32 resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-2">Tone of Voice</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {['Professional', 'Casual', 'Bold', 'Witty'].map(t => (
-                      <button 
-                        key={t}
-                        onClick={() => setTone(t.toLowerCase())}
-                        className={`btn-secondary text-sm py-2 ${tone === t.toLowerCase() ? 'bg-surface-raised border-accent-primary text-accent-primary' : ''}`}>
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <button onClick={handleGenerate} disabled={isLoading} className="btn-primary w-full flex items-center justify-center gap-2">
-                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
-                  {isLoading ? 'Generating...' : 'Generate Content'}
+                <textarea
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Unleash an idea..."
+                  className="input-glass w-full h-36 resize-none text-base"
+                />
+                <button onClick={handleGenerate} disabled={isLoading} className="btn-glow w-full flex items-center justify-center gap-2 text-lg">
+                  {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Sparkles className="w-6 h-6" />}
+                  {isLoading ? 'Energizing...' : 'Generate'}
                 </button>
               </div>
             </div>
@@ -99,78 +75,42 @@ export default function SmartAgentDashboard() {
 
           {/* Right Column: Output Terminal */}
           <div className="lg:col-span-3 space-y-6">
-            <div className="flex items-center gap-3">
-              <Activity className="w-5 h-5 text-accent-primary" />
-              <h2 className="text-lg font-semibold">Output Terminal</h2>
-            </div>
-
             {isLoading && (
-              <div className="card-default flex flex-col items-center justify-center p-12">
-                <Loader2 className="w-12 h-12 text-accent-primary animate-spin mb-4" />
-                <p className="text-text-secondary">Agent is thinking...</p>
+              <div className="card-glass flex flex-col items-center justify-center p-12">
+                <Loader2 className="w-12 h-12 text-accent-electric-jade animate-spin mb-4" />
+                <p className="text-text-muted">Agent is creating...</p>
               </div>
             )}
 
             {!isLoading && !result && (
-              <div className="card-default flex flex-col items-center justify-center p-12 text-center">
-                <Cpu className="w-12 h-12 text-border-interactive mb-4" />
-                <h3 className="font-semibold text-text-primary">Awaiting Task</h3>
-                <p className="text-sm text-text-secondary">Your generated content will appear here.</p>
+              <div className="card-glass flex flex-col items-center justify-center p-12 text-center">
+                <Cpu className="w-12 h-12 text-border-glow mb-4" />
+                <h3 className="font-semibold text-text-bright">Output Terminal</h3>
+                <p className="text-sm text-text-muted">Generated content will appear here.</p>
               </div>
             )}
 
             {result && (
-              <div className="space-y-4">
-                {/* Image Card */}
-                <div className="card-default">
-                  <div className="flex items-center gap-2 text-sm text-text-secondary mb-3">
-                    <ImageIcon className="w-4 h-4" />
-                    <span>Generated Image</span>
+              <div className="space-y-4 animate-stagger">
+                {Object.entries(result).map(([key, value], index) => (
+                  <div key={key} className="card-glass" style={{ '--stagger-index': index } as React.CSSProperties}>
+                    <div className="flex items-center gap-3 text-sm text-accent-electric-jade mb-3">
+                      {key === 'image_url' && <ImageIcon className="w-4 h-4" />}
+                      {key === 'strategy_brief' && <Lightbulb className="w-4 h-4" />}
+                      {key === 'seo_keywords' && <Tags className="w-4 h-4" />}
+                      {key === 'thread' && <MessageSquare className="w-4 h-4" />}
+                      {key === 'hashtags' && <Activity className="w-4 h-4" />}
+                      <span className="font-semibold uppercase tracking-wider">{key.replace('_', ' ')}</span>
+                    </div>
+                    {key === 'image_url' && <img src={value as string} alt={result.visual_concept} className="w-full rounded-lg" />}
+                    {key === 'strategy_brief' && <p className="text-sm text-text-bright">{value as string}</p>}
+                    {key === 'seo_keywords' && <div className="flex flex-wrap gap-2">{(value as string[]).map(kw => <span key={kw} className="bg-surface-glass text-xs font-medium px-2 py-1 rounded-full border border-border-glow">{kw}</span>)}</div>}
+                    {key === 'thread' && <div className="space-y-3">{(value as string[]).map((tweet, i) => <p key={i} className="text-sm text-text-bright bg-background-abyss/50 p-3 rounded-lg">{tweet}</p>)}</div>}
+                    {key === 'hashtags' && <div className="flex flex-wrap gap-2">{(value as string[]).map(tag => <span key={tag} className="text-accent-cyber-pink text-xs font-medium">{tag}</span>)}</div>}
+                    {key === 'title' && <h3 className="text-lg font-bold text-accent-electric-jade">{value as string}</h3>}
+                    {key === 'visual_concept' && <p className="text-sm text-text-muted italic">{value as string}</p>}
                   </div>
-                  <img src={result.image_url} alt={result.visual_concept} className="w-full rounded-lg" />
-                </div>
-
-                {/* Strategy Card */}
-                <div className="card-default">
-                  <div className="flex items-center gap-2 text-sm text-text-secondary mb-2">
-                    <Lightbulb className="w-4 h-4" />
-                    <span>Strategy Brief</span>
-                  </div>
-                  <p className="text-sm text-text-primary">{result.strategy_brief}</p>
-                </div>
-
-                {/* Keywords Card */}
-                <div className="card-default">
-                  <div className="flex items-center gap-2 text-sm text-text-secondary mb-2">
-                    <Tags className="w-4 h-4" />
-                    <span>SEO Keywords</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.seo_keywords.map((kw: string) => <span key={kw} className="bg-surface-overlay text-xs font-medium px-2 py-1 rounded">{kw}</span>)}
-                  </div>
-                </div>
-
-                {/* Thread Card */}
-                <div className="card-default">
-                  <div className="flex items-center gap-2 text-sm text-text-secondary mb-3">
-                    <MessageSquare className="w-4 h-4" />
-                    <span>Generated Thread</span>
-                  </div>
-                  <div className="space-y-3">
-                    {result.thread.map((tweet: string, i: number) => <p key={i} className="text-sm text-text-primary bg-surface-overlay p-3 rounded-lg">{tweet}</p>)}
-                  </div>
-                </div>
-
-                {/* Hashtags Card */}
-                <div className="card-default">
-                  <div className="flex items-center gap-2 text-sm text-text-secondary mb-2">
-                    <History className="w-4 h-4" />
-                    <span>Hashtags</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.hashtags.map((tag: string) => <span key={tag} className="text-accent-secondary text-xs font-medium">{tag}</span>)}
-                  </div>
-                </div>
+                ))}
               </div>
             )}
           </div>
